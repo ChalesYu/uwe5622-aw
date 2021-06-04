@@ -257,7 +257,7 @@ int sprdwl_cmd_init(void)
 	cmd->wake_lock = wakeup_source_register(sprdwl_dev,
 						"Wi-Fi_cmd_wakelock");
 #else
-	cmd->wake_lock = wakeup_source_register("Wi-Fi_cmd_wakelock");
+	cmd->wake_lock = wakeup_source_register(NULL,"Wi-Fi_cmd_wakelock");
 #endif
 	if (!cmd->wake_lock) {
 		wl_err("%s wakeup source register error.\n", __func__);
