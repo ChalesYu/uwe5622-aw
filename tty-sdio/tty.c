@@ -25,7 +25,9 @@
 #include <linux/semaphore.h>
 #include <linux/vmalloc.h>
 #include <linux/atomic.h>
-#include <linux/of.h>
+#ifdef CONFIG_OF
+#include <linux/of_device.h>
+#endif
 #include <linux/compat.h>
 #include <linux/tty_flip.h>
 #include <linux/kthread.h>
