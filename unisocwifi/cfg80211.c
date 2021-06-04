@@ -2210,8 +2210,7 @@ void sprdwl_report_scan_result(struct sprdwl_vif *vif, u16 chan, s16 rssi,
 	ie = mgmt->u.probe_resp.variable;
 	ielen = len - offsetof(struct ieee80211_mgmt, u.probe_resp.variable);
 	/* framework use system bootup time */
-	get_monotonic_boottime(&ts);
-	tsf = (u64)ts.tv_sec * 1000000 + div_u64(ts.tv_nsec, 1000);
+	tsf = (u64)ktime_to_us(ktime_get_boottime());
 	beacon_interval = le16_to_cpu(mgmt->u.probe_resp.beacon_int);
 	capability = le16_to_cpu(mgmt->u.probe_resp.capab_info);
 
@@ -2335,8 +2334,7 @@ void sprdwl_report_connection(struct sprdwl_vif *vif,
 		ielen = conn_info->bea_ie_len - offsetof(struct ieee80211_mgmt,
 						 u.probe_resp.variable);
 		/* framework use system bootup time */
-		get_monotonic_boottime(&ts);
-		tsf = (u64)ts.tv_sec * 1000000 + div_u64(ts.tv_nsec, 1000);
+		tsf = (u64)ktime_to_us(ktime_get_boottime());
 		beacon_interval = le16_to_cpu(mgmt->u.probe_resp.beacon_int);
 		capability = le16_to_cpu(mgmt->u.probe_resp.capab_info);
 		wl_ndev_log(L_DBG, vif->ndev, "%s, %pM, signal: %d\n",

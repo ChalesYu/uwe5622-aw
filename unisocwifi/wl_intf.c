@@ -24,6 +24,9 @@
 #include "rx_msg.h"
 #include "work.h"
 #include "tcp_ack.h"
+#ifndef CPUFREQ_ADJUST
+#define CPUFREQ_ADJUST			(0)
+#endif
 
 #define INIT_INTF(num, type, out, interval, bsize, psize, max,\
 			 threshold, time, pop, push, complete, suspend) \
@@ -1728,7 +1731,7 @@ void sprdwl_tx_delba(struct sprdwl_intf *intf,
 
 int sprdwl_notifier_boost(struct notifier_block *nb, unsigned long event, void *data)
 {
-	struct cpufreq_policy *policy = data;
+	struct cpufreq_policy_data *policy = data;
 	unsigned long min_freq;
 	unsigned long max_freq = policy->cpuinfo.max_freq;
 	struct sprdwl_intf *intf = get_intf();

@@ -269,12 +269,20 @@ static struct nla_policy sprdwl_genl_policy[SPRDWL_NL_ATTR_MAX + 1] = {
 static struct genl_ops sprdwl_nl_ops[] = {
 	{
 		.cmd = SPRDWL_NL_CMD_NPI,
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 3, 0))
+//		.policy = sprdwl_genl_policy,
+#else
 		.policy = sprdwl_genl_policy,
+#endif
 		.doit = sprdwl_nl_npi_handler,
 	},
 	{
 		.cmd = SPRDWL_NL_CMD_GET_INFO,
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 3, 0))
+//		.policy = sprdwl_genl_policy,
+#else
 		.policy = sprdwl_genl_policy,
+#endif
 		.doit = sprdwl_nl_get_info_handler,
 	}
 };
