@@ -7,7 +7,11 @@
 #include <linux/slab.h>
 #include <linux/version.h>
 #if KERNEL_VERSION(4, 14, 0) <= LINUX_VERSION_CODE
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0)
+#include "wakelock.h"
+#else
 #include <linux/wakelock.h>
+#endif
 #include <uapi/linux/sched/types.h>
 #else
 #include <linux/sched.h>

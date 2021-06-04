@@ -118,6 +118,7 @@ ccflags-y += -DCONFIG_WCN_BOOT
 ccflags-y += -DCONFIG_WCN_UTILS
 
 #### include path ######
+ccflags-y += -I$(src)/../tty-sdio
 ccflags-y += -I$(src)/include/
 ccflags-y += -I$(src)/platform/
 ccflags-y += -I$(src)/platform/rf/
