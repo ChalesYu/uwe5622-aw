@@ -596,7 +596,7 @@ static int marlin_find_sdio_device_id(unsigned char *path)
 	fs = get_fs();
 	set_fs(KERNEL_DS);
 	pos = 0;
-	vfs_read(filp, read_buf, sizeof(read_buf), &pos);
+	kernel_read(filp, read_buf, sizeof(read_buf), &pos);
 	WCN_INFO("%s read_buf: %s\n", __func__, read_buf);
 	sdio_id_pos = strstr(read_buf, "SDIO_ID=0000:0000");
 	if (!sdio_id_pos) {

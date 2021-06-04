@@ -1072,7 +1072,7 @@ static int write_mac_addr(char *mac_file, u8 *addr)
 	 /*change it to KERNEL_DS*/
 	 set_fs(KERNEL_DS);
 	 /*write file*/
-	 vfs_write(fp, buf, sizeof(buf), &pos);
+	 kernel_write(fp, buf, sizeof(buf), &pos);
 	 /*close file*/
 	 filp_close(fp, NULL);
 	 /*restore to old fs*/
@@ -1109,7 +1109,7 @@ static int sprdwl_get_mac_from_file(struct sprdwl_vif *vif, u8 *addr)
 	set_fs(KERNEL_DS);
 
 	pos = &fp->f_pos;
-	vfs_read(fp, buf, sizeof(buf), pos);
+	kernel_read(fp, buf, sizeof(buf), pos);
 
 	filp_close(fp, NULL);
 	set_fs(fs);

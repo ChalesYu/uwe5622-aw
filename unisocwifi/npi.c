@@ -48,7 +48,7 @@ static int sprdwl_get_flag(void)
 	set_fs(KERNEL_DS);
 
 	pos = &fp->f_pos;
-	vfs_read(fp, file_data, 1, pos);
+	kernel_read(fp, file_data, 1, pos);
 
 	filp_close(fp, NULL);
 	set_fs(fs);

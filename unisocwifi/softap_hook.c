@@ -50,7 +50,7 @@ static int sprdwl_get_softap_chan(u8 *path)
 	fs = get_fs();
 	set_fs(get_ds());
 
-	ret = vfs_read(fp, buf, sizeof(buf), &fp->f_pos);
+	ret = kernel_read(fp, buf, sizeof(buf), &fp->f_pos);
 
 	filp_close(fp, NULL);
 	set_fs(fs);
