@@ -1096,7 +1096,10 @@ static int sprdwl_get_mac_from_file(struct sprdwl_vif *vif, u8 *addr)
 {
 	struct file *fp = 0;
 	u8 buf[64] = { 0 };
+
+#ifdef setfs
 	mm_segment_t fs;
+#endif
 	loff_t *pos;
 	char tmp_mac_file[256] = {0};
 
@@ -1111,14 +1114,18 @@ static int sprdwl_get_mac_from_file(struct sprdwl_vif *vif, u8 *addr)
 		}
 	}
 
+#ifdef setfs
 	fs = get_fs();
 	set_fs(KERNEL_DS);
+#endif
 
 	pos = &fp->f_pos;
 	kernel_read(fp, buf, sizeof(buf), pos);
 
 	filp_close(fp, NULL);
+#ifdef setfs
 	set_fs(fs);
+#endif
 
 	str2mac(buf, addr);
 	if (!is_valid_ether_addr(addr)) {
