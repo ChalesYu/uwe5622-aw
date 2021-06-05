@@ -1055,7 +1055,9 @@ static struct notifier_block sprdwl_inet6addr_cb = {
 static int write_mac_addr(char *mac_file, u8 *addr)
 {
 	struct file *fp = 0;
+#ifdef setfs
 	mm_segment_t old_fs;
+#endif
 	char buf[18];
 	loff_t pos = 0;
 	/*open file*/
@@ -1067,16 +1069,20 @@ static int write_mac_addr(char *mac_file, u8 *addr)
 	 /*format MAC address*/
 	 sprintf(buf, "%02x:%02x:%02x:%02x:%02x:%02x", addr[0], addr[1],
 		     addr[2], addr[3], addr[4], addr[5]);
+#ifdef setfs
 	 /*save old fs: should be USER_DS*/
 	 old_fs = get_fs();
 	 /*change it to KERNEL_DS*/
 	 set_fs(KERNEL_DS);
+#endif
 	 /*write file*/
 	 kernel_write(fp, buf, sizeof(buf), &pos);
 	 /*close file*/
 	 filp_close(fp, NULL);
+#ifdef setfs
 	 /*restore to old fs*/
 	 set_fs(old_fs);
+#endif
 
 	 return 0;
 }

@@ -95,7 +95,9 @@ static int wcn_find_cp2_file_num(char *path, loff_t *pos)
 {
 	int i;
 	struct kstat config_stat;
+#ifdef setfs
 	mm_segment_t fs_old;
+#endif
 	int ret = 0;
 	/*first file whose size less than wcn_cp2_log_limit_size*/
 	int first_small_file = 0;
@@ -106,8 +108,10 @@ static int wcn_find_cp2_file_num(char *path, loff_t *pos)
 	int num = 0;
 	int exist_file_num = 0;
 
+#ifdef setfs
 	fs_old = get_fs();
 	set_fs(KERNEL_DS);
+#endif
 
 	if (wcn_cp2_log_cover_old) {
 		for (i = 0; i < wcn_cp2_file_max_num; i++) {
@@ -172,7 +176,9 @@ static int wcn_find_cp2_file_num(char *path, loff_t *pos)
 		} else
 			filp_close(fp, NULL);
 	}
+#ifdef setfs
 	set_fs(fs_old);
+#endif
 	return num;
 }
 
@@ -441,7 +447,9 @@ static void wcn_config_log_file(void)
 	struct kstat config_stat;
 	int config_size = 0;
 	int read_len = 0;
+#ifdef setfs
 	mm_segment_t fs_old;
+#endif
 	int ret;
 	char *buf;
 	char *buf_end;
@@ -454,8 +462,10 @@ static void wcn_config_log_file(void)
 	int config_max_num = 0;
 	int index = 0;
 
+#ifdef setfs
 	fs_old = get_fs();
 	set_fs(KERNEL_DS);
+#endif
 	for (index = 0; index < WCN_DEBUG_CFG_MAX_PATH_NUM; index++) {
 		ret = vfs_stat(wcn_cp2_config_path[index], &config_stat);
 		if (!ret) {
@@ -466,7 +476,9 @@ static void wcn_config_log_file(void)
 			break;
 		}
 	}
+#ifdef setfs
 	set_fs(fs_old);
+#endif
 	if (index == WCN_DEBUG_CFG_MAX_PATH_NUM) {
 		WCN_INFO("%s: there is no unisoc_cp2log_config.txt\n",
 			 __func__);
