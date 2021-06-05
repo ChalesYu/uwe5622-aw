@@ -41,15 +41,13 @@ struct wake_lock {
  * Callers must ensure that the @name string won't be freed when @ws is still in
  * use.
  */
-void wakeup_source_prepare(struct wakeup_source *ws, const char *name)
+static void wakeup_source_prepare(struct wakeup_source *ws, const char *name)
 {
 	if (ws) {
 		memset(ws, 0, sizeof(*ws));
 		ws->name = name;
 	}
 }
-EXPORT_SYMBOL_GPL(wakeup_source_prepare);
-
 
 /**
  * wakeup_source_drop - Prepare a struct wakeup_source object for destruction.
@@ -58,14 +56,13 @@ EXPORT_SYMBOL_GPL(wakeup_source_prepare);
  * Callers must ensure that __pm_stay_awake() or __pm_wakeup_event() will never
  * be run in parallel with this function for the same wakeup source object.
  */
-void wakeup_source_drop(struct wakeup_source *ws)
+static void wakeup_source_drop(struct wakeup_source *ws)
 {
 	if (!ws)
 		return;
 
 	__pm_relax(ws);
 }
-EXPORT_SYMBOL_GPL(wakeup_source_drop);
 
 static inline void wakeup_source_init(struct wakeup_source *ws,
 				      const char *name)
