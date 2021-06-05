@@ -5,6 +5,15 @@
 #include <linux/device.h>
 #include <linux/scatterlist.h>
 #include <linux/slab.h>
+#ifndef timespec
+#define timespec timespec64
+#define timespec_to_ns timespec64_to_ns
+#define getnstimeofday ktime_get_real_ts64
+#define timeval __kernel_old_timeval
+#define rtc_time_to_tm rtc_time64_to_tm
+#define timeval_to_ns ktime_to_ns
+#endif
+
 #include <linux/version.h>
 #if KERNEL_VERSION(4, 14, 0) <= LINUX_VERSION_CODE
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0)
