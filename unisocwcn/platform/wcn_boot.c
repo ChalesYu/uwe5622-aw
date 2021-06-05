@@ -79,7 +79,7 @@ enum hi_GPIO_DIR_E {
 
 #ifdef CONFIG_AW_BOARD
 #include <linux/pm_wakeirq.h>
-extern void sunxi_wlan_set_power(int on);
+//extern void sunxi_wlan_set_power(int on);
 extern int sunxi_wlan_get_oob_irq(void);
 extern int sunxi_wlan_get_oob_irq_flags(void);
 
@@ -2617,17 +2617,17 @@ void marlin_chip_en(bool enable, bool reset)
 #ifdef CONFIG_AW_BOARD
 	if (enable) {
 		if (chip_en_count == 0) {
-			sunxi_wlan_set_power(0);
+//			sunxi_wlan_set_power(0);
 			msleep(100);
-			sunxi_wlan_set_power(1);
-			WCN_INFO("marlin chip en pull up\n");
+//			sunxi_wlan_set_power(1);
+			WCN_INFO("marlin chip en dummy pull up -- need manually set GPIO \n");
 		}
 		chip_en_count++;
 	} else {
 		chip_en_count--;
 		if (chip_en_count == 0) {
-			sunxi_wlan_set_power(0);
-			WCN_INFO("marlin chip en pull down\n");
+//			sunxi_wlan_set_power(0);
+			WCN_INFO("marlin chip en dummy pull down -- need manually set GPIO \n");
 		}
 	}
 	return;
