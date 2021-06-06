@@ -94,11 +94,10 @@ static int wcn_mkdir(char *path)
 static int wcn_find_cp2_file_num(char *path, loff_t *pos)
 {
 	int i;
-	struct kstat config_stat;
 #ifdef setfs
 	mm_segment_t fs_old;
 #endif
-	int ret = 0;
+	struct file *fp_size;
 	/*first file whose size less than wcn_cp2_log_limit_size*/
 	int first_small_file = 0;
 	char first_file_set = 0;
@@ -116,11 +115,14 @@ static int wcn_find_cp2_file_num(char *path, loff_t *pos)
 	if (wcn_cp2_log_cover_old) {
 		for (i = 0; i < wcn_cp2_file_max_num; i++) {
 			sprintf(wcn_cp2_file_path, path, i);
-			ret = vfs_stat(wcn_cp2_file_path, &config_stat);
-			if (ret)
+			fp_size = filp_open(wcn_cp2_file_path, O_RDONLY, 0);
+			if (IS_ERR(fp_size)) {
+				WCN_INFO("%s: Error, config file not found. want config file:%s \n",
+					__func__, wcn_cp2_file_path);
 				break;
+			}
 			exist_file_num++;
-			config_size = (int)config_stat.size;
+			config_size = (int)fp_size->f_inode->i_size;
 			if ((config_size < wcn_cp2_log_limit_size) &&
 				(first_file_set == 0)) {
 				first_small_file = i;
@@ -444,13 +446,12 @@ static void wcn_config_log_file(void)
 {
 	struct file *filp;
 	loff_t offset = 0;
-	struct kstat config_stat;
+	struct file *fp_size;
 	int config_size = 0;
 	int read_len = 0;
 #ifdef setfs
 	mm_segment_t fs_old;
 #endif
-	int ret;
 	char *buf;
 	char *buf_end;
 	char *limit_size = "wcn_cp2_log_limit_size=";
@@ -467,9 +468,13 @@ static void wcn_config_log_file(void)
 	set_fs(KERNEL_DS);
 #endif
 	for (index = 0; index < WCN_DEBUG_CFG_MAX_PATH_NUM; index++) {
-		ret = vfs_stat(wcn_cp2_config_path[index], &config_stat);
-		if (!ret) {
-			config_size = (int)config_stat.size;
+		fp_size = filp_open(wcn_cp2_config_path[index], O_RDONLY, 0);
+		if (IS_ERR(fp_size)) {
+			WCN_INFO("%s: Error, config file not found. want config file:%s \n",
+				__func__, wcn_cp2_config_path[index]);
+		}
+		else {
+			config_size = (int)fp_size->f_inode->i_size;
 			WCN_INFO("%s: find config file:%s size:%d\n",
 				 __func__, wcn_cp2_config_path[index],
 				 config_size);
